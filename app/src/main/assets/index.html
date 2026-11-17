@@ -187,7 +187,18 @@ document.querySelectorAll('[data-app]').forEach(function(b){b.addEventListener('
   document.querySelectorAll('.dr').forEach(function(d){d.classList.remove('on')});
   go(b.dataset.app)})});
 document.querySelectorAll('.gb').forEach(function(b){b.addEventListener('click',function(){b.closest('.app').querySelector('.dr').classList.toggle('on')})});
-function fit(){var k=Math.min(innerWidth/1280,innerHeight/720);document.querySelectorAll('.app').forEach(function(a){a.style.transform='translate('+(innerWidth-1280*k)/2+'px,'+(innerHeight-720*k)/2+'px) scale('+k+')'})}
+// Preenche toda a área útil. Em telas com proporção diferente, corta apenas
+// o excedente em vez de deixar faixas pretas nas laterais ou em cima/baixo.
+function fit(){
+  var w=document.documentElement.clientWidth||innerWidth;
+  var h=document.documentElement.clientHeight||innerHeight;
+  var k=Math.max(w/1280,h/720);
+  var x=(w-1280*k)/2;
+  var y=(h-720*k)/2;
+  document.querySelectorAll('.app').forEach(function(a){
+    a.style.transform='translate('+x+'px,'+y+'px) scale('+k+')';
+  });
+}
 fit();addEventListener('resize',fit);
 function all(c,f){document.querySelectorAll(c).forEach(f)}
 function tick(){var d=new Date(),hm=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
